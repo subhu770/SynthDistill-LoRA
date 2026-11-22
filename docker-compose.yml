@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: synthdistill_lora_api
+    environment:
+      - SIMULATION_MODE=true
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./checkpoints:/app/checkpoints
+    command: ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: synthdistill_lora_benchmark
+    environment:
+      - SIMULATION_MODE=true
+    volumes:
+      - ./data:/app/data
+      - ./checkpoints:/app/checkpoints
+    command: ["python", "benchmarks/eval_distillation.py"]
+    depends_on:
+      api:
+        condition: service_healthy

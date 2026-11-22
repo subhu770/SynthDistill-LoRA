@@ -1,0 +1,18 @@
+{
+  "r": 4,
+  "alpha": 8.0,
+  "dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "adapted_layers": [
+    "blocks.0.attn.q_proj",
+    "blocks.0.attn.v_proj",
+    "blocks.1.attn.q_proj",
+    "blocks.1.attn.v_proj"
+  ],
+  "trainable_parameters": 2048,
+  "total_parameters": 137728,
+  "trainable_percentage": 1.487
+}
